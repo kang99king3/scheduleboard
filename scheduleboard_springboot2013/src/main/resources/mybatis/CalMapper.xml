@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.hk.calboard.mapper.CalMapper">
+	<insert id="insertCalBoard" parameterType="CalDto">
+		INSERT INTO CALBOARD 
+		VALUES (NULL, #{id},#{title},#{content},#{mdate},SYSDATE())
+	</insert>
+	
+	<select id="calBoardList" parameterType="Map" resultType="CalDto">
+		SELECT SEQ, ID, TITLE, CONTENT, MDATE, REGDATE FROM CALBOARD 
+		WHERE id=#{id} AND SUBSTRING(mdate,1,8) = #{yyyyMMdd};
+	</select>
+	
+	<select id="calBoardDetail" parameterType="int" resultType="CalDto">
+		SELECT SEQ, ID, TITLE, CONTENT, MDATE, REGDATE
+		FROM CALBOARD 
+		WHERE SEQ=#{seq}
+	</select>
+	
+	<update id="calBoardUpdate" parameterType="CalDto">
+		UPDATE CALBOARD 
+		SET TITLE=#{title}, CONTENT=#{content},
+            MDATE=#{mdate}, REGDATE=SYSDATE() 
+		WHERE SEQ=#{seq}
+	</update>
+	
+	<delete id="calMulDel" parameterType="Map">
+		DELETE FROM calboard WHERE seq IN
+		<foreach collection="seqs" item="seq" open="(" close=")" separator=",">
+			#{seq}		
+		</foreach>
+	</delete>
+	
+	<!-- 달력화면에 해당 일에 마우스를 올리면 일정개수를 보여주는 쿼리 -->
+	<select id="calBoardCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*) FROM CALBOARD 
+		WHERE ID=#{id} AND SUBSTR(MDATE,1,8)=#{yyyyMMdd}
+	</select>
+	
+	<!-- 달력화면에 일마다 존재하는 일정을 최대3개까지 보여주는 쿼리 -->
+	<select id="CalViewList" parameterType="Map" resultType="CalDto">
+		SELECT RN,SEQ,ID,TITLE,CONTENT,MDATE,REGDATE
+		FROM
+			(SELECT (ROW_NUMBER() OVER(PARTITION BY SUBSTR(MDATE,1,8) ORDER BY MDATE)) RN,
+			       SEQ, ID, TITLE, CONTENT, MDATE, REGDATE
+			FROM CALBOARD 
+			WHERE ID=#{id} AND SUBSTR(MDATE,1,6) = #{yyyyMM} ) CAL
+		
+		WHERE RN BETWEEN 1 AND 3
+	</select>
+</mapper>
