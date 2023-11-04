@@ -4,11 +4,14 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.hk.calboard.dtos.CalDto;
 
+@Component
 public class Util {
-private String toDates;//문자열 날짜를 원하는 패턴으로 만들어 저장할 필드
 	
+	private String toDates;//문자열 날짜를 원하는 패턴으로 만들어 저장할 필드
 	
 	public static String fontColor(int dayOfWeek,int i){
 		//토요일:(dayOfWeek-1+i)%7==0
@@ -65,4 +68,7 @@ private String toDates;//문자열 날짜를 원하는 패턴으로 만들어 �
 		}
 		return calList;
 	}
+
+	
+	
 }

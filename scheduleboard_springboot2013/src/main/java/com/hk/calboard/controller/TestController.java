@@ -4,32 +4,36 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class TestController {
 
 	public Map<String, Integer> makeCalendar(HttpServletRequest request){
-		Map<String , Integer>map=new HashMap();
+		Map<String , Integer>map=new HashMap<>();
 		
 		//달력의 날짜를 바꾸기 위해 전달된 year와 month 파라미터를 받는 코드
 		String paramYear=request.getParameter("year");
 		String paramMonth=request.getParameter("month");
 		
 		Calendar cal=Calendar.getInstance(); // new(X)
-		int year=cal.get(Calendar.YEAR);
-		int month=cal.get(Calendar.MONTH)+1;// API: 0월~11월
+//		int year=cal.get(Calendar.YEAR);
+//		int month=cal.get(Calendar.MONTH)+1;// API: 0월~11월
 		
+		int year=paramYear==null?cal.get(Calendar.YEAR):Integer.parseInt(paramYear);
+		int month=paramMonth==null?cal.get(Calendar.MONTH)+1:Integer.parseInt(paramMonth);
 		//달이 바뀌면서 년도와 월 값에 대한 처리 코드 작성
-		if(paramYear!=null){
-			year=Integer.parseInt(paramYear);
-		}
-		if(paramMonth!=null){
-			month=Integer.parseInt(paramMonth);
-		}
+//		if(paramYear!=null){
+//			year=Integer.parseInt(paramYear);
+//		}
+//		if(paramMonth!=null){
+//			month=Integer.parseInt(paramMonth);
+//		}
 		
 		//여기에 작성하세요 0월 -1월....   13월 14월 ....  월을 변경할 때 오류를 처리하기
 		//월이 증가하다가 12에서 13으로 넘어가는 과정에서 14,15,16...증가되는거 처리하기
@@ -55,8 +59,6 @@ public class TestController {
 		map.put("month", month);
 		map.put("dayOfWeek", dayOfWeek);
 		map.put("lastDay", lastDay);
-		
-		
 		
 		return map; 
 	}

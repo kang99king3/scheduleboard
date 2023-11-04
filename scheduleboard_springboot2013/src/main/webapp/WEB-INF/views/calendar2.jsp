@@ -1,4 +1,5 @@
 <%@page import="java.util.Calendar"%>
+<%@page import="com.hk.calboard.utils.Util"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%request.setCharacterEncoding("utf-8"); %>    
@@ -14,54 +15,69 @@
 <style type="text/css">
 	#calendar td > p {
 		margin-bottom: 5px ;
-		background-color: orange;
+		background-color: 	#28A8A8;
+		font-size: 7px;
+		color:white;
+		font-weight: bold;
+		padding-left: 5px;
 	}
 	#calendar td{
 		height: 115px;
+		position: relative;
+ 		width:200px; 
+		
+	}
+	.pen{width: 20px; height: 20px;}
+	.d{font-size: 15px; font-family: bold;}
+	
+	.cp{
+		position: absolute;
+		left:20px;
+		top:-30px;
+		width: 40px;
+		height: 40px;
+		border-radius: 20px 20px 20px 1px;
+		background-color: pink;
+		line-height: 40px;
+		text-align: center;
+		font-weight: bold;
 	}
 </style>
+<script type="text/javascript">
+	function isTwo(str){
+		return str.length<2?"0"+str:str;
+	}
 
+	$(function(){    //--> jquery onload 실행
+		$(".d").hover(function(){
+			//controller쪽으로 전달할 파라미터 yyyyMMdd를 구하자
+			var aDate=$(this);//현재 마우스가 올라간, 일을 나타내는 a태그
+			var year=$(".y").text().trim();//년   <a>2023 </a>
+			var month=$(".m").text().trim();//월
+			var date=aDate.text().trim();//일
+			var yyyyMMdd=year+isTwo(month)+isTwo(date);
+// 			alert(yyyyMMdd);
+			if(aDate.nextAll("p").length>0){
+				$.ajax({
+					method:"get", //전송방식
+					url:"calCountAjax.do", //요청 url
+					data:{"yyyyMMdd":yyyyMMdd}, //서버로 보낼 값
+					dataType:"json",  //서버에서 받을 데이터의 타입
+					async:false,   //ajax()메서드가 비동기로 실행하는것을 막음:false설정
+					success:function(data){ //서버와 통신 성공했다면 기능을 실행하자
+	// 					alert(data.count);// data["count"]이렇게도 쓰고...
+						aDate.after("<div class='cp'>"+data.count+"</div>");						
+					}
+				});
+			}
+		},function(){
+			$(".cp").remove();
+		});
+	
+	})
+</script>
 </head>
 <body>
-<%
-
-	//달력의 날짜를 바꾸기 위해 전달된 year와 month 파라미터를 받는 코드
-	String paramYear=request.getParameter("year");
-	String paramMonth=request.getParameter("month");
-	
-	Calendar cal=Calendar.getInstance(); // new(X)
-	int year=cal.get(Calendar.YEAR);
-	int month=cal.get(Calendar.MONTH)+1;// API: 0월~11월
-	
-	//달이 바뀌면서 년도와 월 값에 대한 처리 코드 작성
-	if(paramYear!=null){
-		year=Integer.parseInt(paramYear);
-	}
-	if(paramMonth!=null){
-		month=Integer.parseInt(paramMonth);
-	}
-	
-	//여기에 작성하세요 0월 -1월....   13월 14월 ....  월을 변경할 때 오류를 처리하기
-	//월이 증가하다가 12에서 13으로 넘어가는 과정에서 14,15,16...증가되는거 처리하기
-	if(month>12){
-		month=1;
-		year++;
-	}
-	
-	//월이 감소하다가 1에서 0또는 -1,-2... 변경되는거 처리하기
-	if(month<1){
-		month=12;
-		year--;
-	}
-	
-	//현재 월의 1일에 대한 요일 구하기: 1~7 --> 1(일), 2(월), 3(화), 4(수)...
-	cal.set(year,month-1,1);
-	int dayOfWeek=cal.get(Calendar.DAY_OF_WEEK);//1~7 중에 반환
-	
-	//현재 월의 마지막 날 구하기
-	int lastDay=cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-	
-%>
 <div id="container">
 <h1>일정관리2[달력보기]</h1>
 <table class="table" id="calendar">
@@ -85,36 +101,29 @@
 		<th>토</th>
 	</tr>
 	<tr>
-	<c:forEach begin="1" end="${calMap.dayOfWeek}"  var="i" step="1" >
-		<td>&nbsp;</td>
-	</c:forEach>
-	<c:forEach begin="1" end="${calMap.lastDay}" var="i" step="1">
-	
-	</c:forEach>
-	<%                 
-
-		for(int i=1;i<=lastDay;i++){
-			%>
+		<c:forEach begin="1" end="${calMap.dayOfWeek-1}"  step="1" >
+			<td>&nbsp;</td>
+		</c:forEach>
+		<c:forEach begin="1" end="${calMap.lastDay}" var="i" step="1">
 			<td>
-				<a href="#"><%=i%></a>
-<!-- 				<p>aaa</p> -->
-<!-- 				<p>aaa</p> -->
-<!-- 				<p>aaa</p> -->
+				<a href="calBoardList.do?year=${calMap.year}&month=${calMap.month}&date=${i}" class="d">${i}</a>
+			    <a href="addCalBoardForm.do?year=${calMap.year}&month=${calMap.month}&date=${i}">
+			    	<img class="pen" alt="일정추가" src="img/pen.png"/>
+			    </a>
+			    ${Util.getCalViewList(i,clist)}
 			</td>
-			<%
-			if((dayOfWeek-1+i)%7==0){
-				out.print("</tr><tr>");
-			}
-		}
-		//달력의 마지막 날 이후 공백 작성하여 달력폼을 완성
-		for(int i=0;i<(7-(dayOfWeek-1+lastDay)%7)%7;i++){
-			out.print("<td>&nbsp;</td>");
-		}
-	%>
+			<c:if test="${(calMap.dayOfWeek-1+i)%7 == 0}">
+				${"</tr><tr>"}
+			</c:if>
+		</c:forEach>
+		<c:forEach begin="1" end="${(7-(calMap.dayOfWeek-1+calMap.lastDay)%7)%7}" step="1">
+			<td>&nbsp;</td>
+		</c:forEach>
 	</tr>		
 	</table>								
 </div>                                 
 <jsp:include page="footer.jsp"/>
+
 </body>
 </html>
 

@@ -1,12 +1,17 @@
 package com.hk.calboard.service;
 
 import java.util.List;
+import java.util.Map;
+
+
 
 import com.hk.calboard.command.InsertCalCommand;
 import com.hk.calboard.dtos.CalDto;
 
-public interface ICalService {
+import jakarta.servlet.http.HttpServletRequest;
 
+public interface ICalService {
+		public Map<String, Integer> makeCalendar(HttpServletRequest request);
 	// 일정추가하기: ID, TITLE, CONTENT, MDATE
 		public boolean insertCalBoard(InsertCalCommand insertCalCommand);
 		// 일정목록조회하기: 파라미터[ID, YYYYMMDD]

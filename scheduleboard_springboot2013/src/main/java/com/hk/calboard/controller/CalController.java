@@ -53,11 +53,13 @@ public class CalController {
 			List<CalDto> clist = calService.CalViewList(id, yyyyMM);
 			model.addAttribute("clist", clist);
 		
-			return "calendar";//redirect가 아니죠?? forward 방식으로 응답
+			Map<String,Integer>calMap=calService.makeCalendar(request);
+			model.addAttribute("calMap", calMap);
+			return "calendar2";//redirect가 아니죠?? forward 방식으로 응답
 		}
 		
 		@GetMapping(value="/addCalBoardForm.do")
-		public String addCalForm(Locale locale) {
+		public String addCalForm(Locale locale, Model model) {
 			logger.info("일정 추가폼으로 이동{}",locale);
 			return "addCalBoardForm";
 		}

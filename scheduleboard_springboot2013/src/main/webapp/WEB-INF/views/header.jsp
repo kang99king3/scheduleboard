@@ -27,7 +27,7 @@
 		width:80%;
 		margin: 0 auto;
 	}
-	.footer{position: absolute;left:0px;right:0px; bottom: 0px; }
+/* 	.footer{position: absolute;left:0px;right:0px; bottom: 0px; } */
 </style>
 
 </head>

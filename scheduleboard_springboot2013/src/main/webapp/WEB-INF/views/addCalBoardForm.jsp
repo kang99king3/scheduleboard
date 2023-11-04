@@ -12,16 +12,6 @@
 <title>Insert title here</title>
 <jsp:include page="header.jsp"/>
 </head>
-<%
-	Calendar cal=Calendar.getInstance();
-	int hour = cal.get(Calendar.HOUR_OF_DAY);
-	int min = cal.get(Calendar.MINUTE);
-	System.out.println("시간:"+hour);
-	
-	//EL에서 꺼내 쓰기 위해 pageScope에 저장함 --> controller에서는 requestScope에 담기
-	pageContext.setAttribute("hour", hour);
-	pageContext.setAttribute("min", min);
-%>
 <body>
 <div id="container">
 <h1>일정 추가하기</h1>

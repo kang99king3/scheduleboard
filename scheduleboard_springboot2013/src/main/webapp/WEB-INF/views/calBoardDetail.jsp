@@ -31,7 +31,7 @@
 	</tr>
 	<tr>
 		<th>내용</th>
-		<td><textarea rows="10" cols="60" readonly="readonly">${dto.content}</textarea></td>
+		<td><textarea class="form-control" rows="10" cols="60" readonly="readonly">${dto.content}</textarea></td>
 	</tr>
 	<tr>
 		<td colspan="2">

@@ -154,7 +154,7 @@
 				<a class="d"  href="calBoardList.do?year=<%=year%>&month=<%=month%>&date=<%=i%>" style="color:<%=Util.fontColor(dayOfWeek, i)%>;"  ><%=i%></a>
 				
 				<a href="addCalBoardForm.do?year=<%=year%>&month=<%=month%>&date=<%=i%>"><img class="pen" src="img/pen.png" alt="일정추가"/></a>
-				<%=Util.getCalViewList(i, clist) %>
+				<%=Util.getCalViewList(i, clist) %> 
 			</td>
 			<%
 			if((dayOfWeek-1+i)%7==0){

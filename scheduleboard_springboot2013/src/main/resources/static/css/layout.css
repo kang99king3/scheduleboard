@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+.content{
+    margin-bottom:150px;
+    margin-top: 150px;
+    margin-left: 300px;
+    margin-right: 300px;
+}
+
+/* span{color:red; font-size: 10px;} */
+
+#container{
+	width:1200px;
+	margin: 0 auto;
+}
+
+.errorField{
+	color:red;
+		
+}

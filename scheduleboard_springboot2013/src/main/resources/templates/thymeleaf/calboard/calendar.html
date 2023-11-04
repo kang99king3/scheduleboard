@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{thymeleaf/layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	.cal {width:100%; }
+	.cal #thead > div, .cal #tbody > div{display: inline-block;width:165px;}
+	.cal #tbody > div{height: 120px; border-top: 1px solid gray; vertical-align: top;}
+	#thead{margin-bottom: 10px; padding-bottom: 10px;}
+	.pen{width: 15px;height: 15px;}
+	.cal #tbody > div > p{background-color: orange;}
+</style>
+</head>
+<body>
+<div layout:fragment="content">
+	<div id="container">
+	<h1>일정관리2[달력보기]</h1>
+		<div class="cal">
+			<div id="ctitle" style="text-align: center; font-size: 30px;">
+				<a th:href="@{/schedule/calendar(year=${calMap.year-1},month=${calMap.month})}">◁</a>
+				<a href="@{/schedule/calendar(year=${calMap.year},month=${calMap.month-1})}">◀</a>
+				<span class="y" th:text="${calMap.year}"></span>
+				<span>년</span>
+				<span class="m" th:text="${calMap.month}"></span>
+				<span>월</span>
+				<a href="@{/schedule/calendar(year=${calMap.year},month=${calMap.month+1})}">▶</a>
+				<a href="@{/schedule/calendar(year=${calMap.year+1},month=${calMap.month})}">▷</a>
+			</div>
+			<div id="thead" style="text-align: center;font-size: 20px;">
+				<div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+			</div>	
+			<div id="tbody">
+				<div th:each="num: ${#numbers.sequence(1,calMap.dayOfWeek-1)}">&nbsp;</div>
+				<th:block th:each="i:${#numbers.sequence(1,calMap.lastDay)}">
+					<div>
+						<a th:href="@{/schedule/calBoardList(year=${calMap.year},month=${calMap.month},date=${i})}" th:text="${i}" ></a>
+						<a th:href="@{/schedule/addCalBoardForm(year=${calMap.year},month=${calMap.month},date=${i})}" >
+							<img class="pen" th:src="@{/img/pen.png}"/>						
+						</a>
+						<br/>
+						[(${@util.getCalViewList(i,clist)})]
+					</div>
+					<th:block th:if="${(calMap.dayOfWeek-1+i)%7 == 0}">
+					<br/>
+					</th:block>
+				</th:block>	
+				<div th:each="num:${#numbers.sequence(1,(7-(calMap.dayOfWeek-1+calMap.lastDay)%7)%7)}">&nbsp;</div>
+			</div>
+		</div>					
+	</div>  
+</div>
+</body>
+</html>
