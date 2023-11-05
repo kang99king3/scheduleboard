@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hk.calboard.command.InsertCalCommand;
+import com.hk.calboard.command.UpdateCalCommand;
 import com.hk.calboard.dtos.CalDto;
 import com.hk.calboard.mapper.CalMapper;
 import com.hk.calboard.utils.Util;
@@ -103,18 +104,18 @@ public class CalServieImp implements ICalService{
 	}
 
 	@Override
-	public boolean calBoardUpdate(InsertCalCommand insertCalCommand) {
+	public boolean calBoardUpdate(UpdateCalCommand updateCalCommand) {
 		// DB에 mdate 컬럼에 저장할 값을 처리: year,month,date... 12자리로 변환
-		String mdate=insertCalCommand.getYear()
-				    +Util.isTwo(insertCalCommand.getMonth()+"")
-				    +Util.isTwo(insertCalCommand.getDate()+"")
-				    +Util.isTwo(insertCalCommand.getHour()+"")
-				    +Util.isTwo(insertCalCommand.getMin()+""); // 12자리 생성
+		String mdate=updateCalCommand.getYear()
+				    +Util.isTwo(updateCalCommand.getMonth()+"")
+				    +Util.isTwo(updateCalCommand.getDate()+"")
+				    +Util.isTwo(updateCalCommand.getHour()+"")
+				    +Util.isTwo(updateCalCommand.getMin()+""); // 12자리 생성
 		//dto <---command값을 저장
 		CalDto dto=new CalDto();
-		dto.setSeq(insertCalCommand.getSeq());
-		dto.setTitle(insertCalCommand.getTitle());
-		dto.setContent(insertCalCommand.getContent());
+		dto.setSeq(updateCalCommand.getSeq());
+		dto.setTitle(updateCalCommand.getTitle());
+		dto.setContent(updateCalCommand.getContent());
 		dto.setMdate(mdate);
 		
 		return calDaoMapper.calBoardUpdate(dto);
@@ -122,7 +123,9 @@ public class CalServieImp implements ICalService{
 
 	@Override
 	public boolean calMulDel(String[] seqs) {
-		return calDaoMapper.calMulDel(seqs);
+		Map<String , String[]>map=new HashMap<>();
+		map.put("seqs", seqs);
+		return calDaoMapper.calMulDel(map);
 	}
 
 	@Override

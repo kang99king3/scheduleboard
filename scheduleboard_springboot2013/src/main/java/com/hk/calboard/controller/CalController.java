@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hk.calboard.command.InsertCalCommand;
+import com.hk.calboard.command.UpdateCalCommand;
 import com.hk.calboard.dtos.CalDto;
 import com.hk.calboard.service.ICalService;
 import com.hk.calboard.utils.Util;
@@ -123,17 +124,17 @@ public class CalController {
 		}
 		
 		@PostMapping(value="calBoardUpdate.do")
-		public String calBoardUpdate(InsertCalCommand insertCalCommand, Model model) {
+		public String calBoardUpdate(UpdateCalCommand updateCalCommand, Model model) {
 			logger.info("일정 수정하기");
 			
 			try {
-				boolean isS=calService.calBoardUpdate(insertCalCommand);
+				boolean isS=calService.calBoardUpdate(updateCalCommand);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return "error500.do";
 			}
 			
-			return "redirect:calBoardDetail.do?seq="+insertCalCommand.getSeq();
+			return "redirect:calBoardDetail.do?seq="+updateCalCommand.getSeq();
 		}
 		
 		@RequestMapping(value = "/calMulDel.do",method = {RequestMethod.POST,RequestMethod.GET})

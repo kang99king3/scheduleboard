@@ -50,9 +50,25 @@ public class Util {
 		this.toDates=sdf.format(tm);
 	}
 	
+	//thymeleaf용
+	public String toDates(String mDate) {
+		//날짜형식: yyyy-MM-dd hh:mm:ss --> mDate를 날짜 형식으로 만들기 위한 사전 준비
+		//        "202304071503"
+		String m=mDate.substring(0, 4)+"-"
+				+mDate.substring(4, 6)+"-"
+				+mDate.substring(6, 8)+" "
+				+mDate.substring(8, 10)+":"
+				+mDate.substring(10)+":00";
+		
+		SimpleDateFormat sdf=new SimpleDateFormat("yy-MM-dd HH:mm");
+		Timestamp tm=Timestamp.valueOf(m);//문자열값을 Date타입으로 변환
+		return sdf.format(tm);
+	}
 	public String getToDates() {
 		return this.toDates;
 	}
+	
+	
 	
 	public static String getCalViewList(int i,List<CalDto> clist) {
 		String d=isTwo(i+"");//숫자 4 --> "04" 변환

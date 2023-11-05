@@ -6,6 +6,7 @@ import java.util.Map;
 
 
 import com.hk.calboard.command.InsertCalCommand;
+import com.hk.calboard.command.UpdateCalCommand;
 import com.hk.calboard.dtos.CalDto;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public interface ICalService {
 		// 일정 상세내용 조회: SEQ
 		public CalDto calBoardDetail(int seq);
 		// 일정 수정하기: 파리미터[SEQ, TITLE, CONTENT, MDATE)
-		public boolean calBoardUpdate(InsertCalCommand insertCalCommand);
+		public boolean calBoardUpdate(UpdateCalCommand updateCalCommand);
 		// 일정 삭제하기: SEQ
 		public boolean calMulDel(String[] seqs);
 		// 일정 개수 구하기: ID, YYYYMMDD

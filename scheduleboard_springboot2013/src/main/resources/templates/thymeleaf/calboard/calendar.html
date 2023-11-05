@@ -8,11 +8,57 @@
 <style type="text/css">
 	.cal {width:100%; }
 	.cal #thead > div, .cal #tbody > div{display: inline-block;width:165px;}
-	.cal #tbody > div{height: 120px; border-top: 1px solid gray; vertical-align: top;}
+	.cal #tbody > div{position: relative; height: 120px; border-top: 1px solid gray; vertical-align: top;}
 	#thead{margin-bottom: 10px; padding-bottom: 10px;}
 	.pen{width: 15px;height: 15px;}
 	.cal #tbody > div > p{background-color: orange;}
+	.d{font-size: 20px; font-weight: bold;}
+	.cp{
+		position: absolute;
+		left:20px;
+		top:-30px;
+		width: 40px;
+		height: 40px;
+		border-radius: 20px 20px 20px 1px;
+		background-color: pink;
+		line-height: 40px;
+		text-align: center;
+		font-weight: bold;
+	}
 </style>
+<script type="text/javascript">
+	function isTwo(str){
+		return str.length<2?"0"+str:str;
+	}
+
+	$(function(){    //--> jquery onload 실행
+		$(".d").hover(function(){
+			//controller쪽으로 전달할 파라미터 yyyyMMdd를 구하자
+			var aDate=$(this);//현재 마우스가 올라간, 일을 나타내는 a태그
+			var year=$(".y").text().trim();//년   <a>2023 </a>
+			var month=$(".m").text().trim();//월
+			var date=aDate.text().trim();//일
+			var yyyyMMdd=year+isTwo(month)+isTwo(date);
+// 			alert(yyyyMMdd);
+			if(aDate.nextAll("p").length>0){
+				$.ajax({
+					method:"get", //전송방식
+					url:"calCountAjax.do", //요청 url
+					data:{"yyyyMMdd":yyyyMMdd}, //서버로 보낼 값
+					dataType:"json",  //서버에서 받을 데이터의 타입
+					async:false,   //ajax()메서드가 비동기로 실행하는것을 막음:false설정
+					success:function(data){ //서버와 통신 성공했다면 기능을 실행하자
+	// 					alert(data.count);// data["count"]이렇게도 쓰고...
+						aDate.after("<div class='cp'>"+data.count+"</div>");						
+					}
+				});
+			}
+		},function(){
+			$(".cp").remove();
+		});
+	
+	})
+</script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -21,33 +67,39 @@
 		<div class="cal">
 			<div id="ctitle" style="text-align: center; font-size: 30px;">
 				<a th:href="@{/schedule/calendar(year=${calMap.year-1},month=${calMap.month})}">◁</a>
-				<a href="@{/schedule/calendar(year=${calMap.year},month=${calMap.month-1})}">◀</a>
+				<a th:href="@{/schedule/calendar(year=${calMap.year},month=${calMap.month-1})}">◀</a>
 				<span class="y" th:text="${calMap.year}"></span>
 				<span>년</span>
 				<span class="m" th:text="${calMap.month}"></span>
 				<span>월</span>
-				<a href="@{/schedule/calendar(year=${calMap.year},month=${calMap.month+1})}">▶</a>
-				<a href="@{/schedule/calendar(year=${calMap.year+1},month=${calMap.month})}">▷</a>
+				<a th:href="@{/schedule/calendar(year=${calMap.year},month=${calMap.month+1})}">▶</a>
+				<a th:href="@{/schedule/calendar(year=${calMap.year+1},month=${calMap.month})}">▷</a>
 			</div>
 			<div id="thead" style="text-align: center;font-size: 20px;">
 				<div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
 			</div>	
 			<div id="tbody">
-				<div th:each="num: ${#numbers.sequence(1,calMap.dayOfWeek-1)}">&nbsp;</div>
+				<th:block th:if="${calMap.dayOfWeek>1}">
+					<div th:each="num: ${#numbers.sequence(1,calMap.dayOfWeek-1)}">&nbsp;</div>				
+				</th:block>
 				<th:block th:each="i:${#numbers.sequence(1,calMap.lastDay)}">
 					<div>
-						<a th:href="@{/schedule/calBoardList(year=${calMap.year},month=${calMap.month},date=${i})}" th:text="${i}" ></a>
+						<a   class="d" th:style="'color:'+${@util.fontColor(calMap.dayOfWeek,i)}"
+						   th:href="@{/schedule/calBoardList(year=${calMap.year},month=${calMap.month},date=${i})}" 
+						   th:text="${i}" ></a>
 						<a th:href="@{/schedule/addCalBoardForm(year=${calMap.year},month=${calMap.month},date=${i})}" >
 							<img class="pen" th:src="@{/img/pen.png}"/>						
 						</a>
 						<br/>
-						[(${@util.getCalViewList(i,clist)})]
+						[(${@util.getCalViewList(i,clist)})]  
 					</div>
 					<th:block th:if="${(calMap.dayOfWeek-1+i)%7 == 0}">
 					<br/>
 					</th:block>
 				</th:block>	
-				<div th:each="num:${#numbers.sequence(1,(7-(calMap.dayOfWeek-1+calMap.lastDay)%7)%7)}">&nbsp;</div>
+				<th:block th:if="${(calMap.dayOfWeek-1+calMap.lastDay)%7>0}">
+					<div th:each="num:${#numbers.sequence(1,(7-(calMap.dayOfWeek-1+calMap.lastDay)%7)%7)}">&nbsp;</div>				
+				</th:block>
 			</div>
 		</div>					
 	</div>  

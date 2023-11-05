@@ -1,6 +1,7 @@
 package com.hk.calboard.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,7 +20,7 @@ public interface CalMapper {
 		// 일정 수정하기: 파리미터[SEQ, TITLE, CONTENT, MDATE)
 		public boolean calBoardUpdate(CalDto dto);
 		// 일정 삭제하기: SEQ
-		public boolean calMulDel(String[] seqs);
+		public boolean calMulDel(Map<String , String[]> map);
 		// 일정 개수 구하기: ID, YYYYMMDD
 		public int calBoardCount(String id, String yyyyMMdd);
 		// 달력에서 일정 보여주기: ID, YYYYMM
