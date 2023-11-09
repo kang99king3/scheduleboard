@@ -19,11 +19,11 @@
 <link th:href="@{/css/layout.css}" rel="stylesheet">
 </head>
 <body>
-	<div th:replace="thymeleaf/fragments/header::header"></div>
+	<div th:replace="~{thymeleaf/fragments/header::header}"></div>
 	
 	<div layout:fragment="content" class="content"></div>
 	
-	<div th:replace="thymeleaf/fragments/footer::footer"></div>
+	<div th:replace="~{thymeleaf/fragments/footer::footer}"></div>
 </body>
 </html>
 
