@@ -66,7 +66,7 @@ public class CalController {
 		}
 		
 		@PostMapping(value="/addCalBoard.do")
-		public String addCalBoard(InsertCalCommand insertCalCommand, Locale locale) {
+		public String addCalBoard(InsertCalCommand insertCalCommand, Locale locale) throws Exception {
 			logger.info("일정작성하기{}",locale);
 			
 			boolean isS=calService.insertCalBoard(insertCalCommand);

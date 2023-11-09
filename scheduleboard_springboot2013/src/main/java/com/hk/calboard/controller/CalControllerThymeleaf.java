@@ -73,7 +73,7 @@ public class CalControllerThymeleaf {
 	@PostMapping(value="/addCalBoard")
 	public String addCalBoard(@Validated InsertCalCommand insertCalCommand
 			                  ,BindingResult result, Locale locale
-			                 ) {
+			                 ) throws Exception {
 		logger.info("일정작성하기{}",locale);
 		if(result.hasErrors()) {
 			System.out.println("글을 모두 입력하세요");
