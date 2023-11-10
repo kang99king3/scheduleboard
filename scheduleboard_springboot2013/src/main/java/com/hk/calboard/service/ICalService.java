@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public interface ICalService {
 		public Map<String, Integer> makeCalendar(HttpServletRequest request);
 	// 일정추가하기: ID, TITLE, CONTENT, MDATE
-		public boolean insertCalBoard(InsertCalCommand insertCalCommand);
+		public boolean insertCalBoard(InsertCalCommand insertCalCommand) throws Exception;
 		// 일정목록조회하기: 파라미터[ID, YYYYMMDD]
 		public List<CalDto> calBoardList(String id, String yyyyMMdd);
 		// 일정 상세내용 조회: SEQ

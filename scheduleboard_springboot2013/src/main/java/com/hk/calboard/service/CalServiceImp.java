@@ -19,7 +19,7 @@ import com.hk.calboard.utils.Util;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
-public class CalServieImp implements ICalService{
+public class CalServiceImp implements ICalService{
 
 	@Autowired
 	private CalMapper calDaoMapper;
@@ -75,7 +75,7 @@ public class CalServieImp implements ICalService{
 	
 	
 	@Override
-	public boolean insertCalBoard(InsertCalCommand insertCalCommand) {
+	public boolean insertCalBoard(InsertCalCommand insertCalCommand) throws Exception {
 		// DB에 mdate 컬럼에 저장할 값을 처리: year,month,date... 12자리로 변환
 		String mdate=insertCalCommand.getYear()
 				    +Util.isTwo(insertCalCommand.getMonth()+"")
@@ -90,6 +90,10 @@ public class CalServieImp implements ICalService{
 		dto.setMdate(mdate);
 		
 		int count=calDaoMapper.insertCalBoard(dto);
+		
+		if(count>0) {
+			throw new Exception("트랜젝션 실행");
+		}
 		return count>0?true:false;
 	}
 

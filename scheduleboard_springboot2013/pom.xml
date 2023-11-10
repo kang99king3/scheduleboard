@@ -125,17 +125,24 @@
 		    <scope>runtime</scope>
 		</dependency>
 		<!-- log4j 설정-->
-<!--		<dependency>-->
-<!--		    <groupId>org.springframework.boot</groupId>-->
-<!--		    <artifactId>spring-boot-starter</artifactId>-->
-<!--		</dependency>-->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter</artifactId>
+		</dependency>
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
+<<<<<<< HEAD
 		<dependency>
 		    <groupId>jakarta.servlet.jsp.jstl</groupId>
 		    <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+=======
+	<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-aop</artifactId>
+>>>>>>> branch 'main' of https://github.com/kang99king3/scheduleboard.git
 		</dependency>
 	</dependencies>
 
