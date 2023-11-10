@@ -64,6 +64,7 @@ public class Util {
 		Timestamp tm=Timestamp.valueOf(m);//문자열값을 Date타입으로 변환
 		return sdf.format(tm);
 	}
+	
 	public String getToDates() {
 		return this.toDates;
 	}
