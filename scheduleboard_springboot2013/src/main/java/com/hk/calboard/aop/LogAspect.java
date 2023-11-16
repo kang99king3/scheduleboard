@@ -15,7 +15,10 @@ import org.springframework.stereotype.Component;
 public class LogAspect {
 
 	Logger logger=LoggerFactory.getLogger(getClass());
-	
+	//메서드에 설정
+	//execution(com.hk.calboard.controller.*(..))
+	//특정타입에 속한 메소드 설정
+	//within(com.hk.calboard.controller.*)
 	@Pointcut("within(com.hk.calboard.controller.*)")
 	public void controller() {}
 	
@@ -40,3 +43,9 @@ public class LogAspect {
 		logger.info("오류:{}",e.getMessage());
 	}
 }
+
+
+
+
+
+
